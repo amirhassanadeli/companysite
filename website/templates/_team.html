@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>اعضای تیم | IntelRain</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+
+    <style>
+        body {
+            font-family: 'Vazirmatn', sans-serif;
+            background: #f4f7fa;
+        }
+
+        .team-section {
+            padding: 60px 0;
+        }
+
+        .team-card {
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+            transition: .3s;
+            border: 1px solid rgba(0, 0, 0, 0.08);
+        }
+
+        .team-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 10px 22px rgba(0, 0, 0, 0.08);
+        }
+
+        .team-img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid #e2e8f0;
+            margin-bottom: 12px;
+        }
+
+        .team-name {
+            font-weight: 700;
+            font-size: 18px;
+            color: #1e293b;
+        }
+
+        .team-position {
+            font-size: 14px;
+            color: #475569;
+            margin-bottom: 8px;
+        }
+
+        .team-bio {
+            font-size: 13px;
+            color: #6b7280;
+        }
+
+        .team-social i {
+            font-size: 18px;
+            margin: 0 6px;
+            color: #475569;
+            transition: .2s;
+        }
+
+        .team-social i:hover {
+            color: #2563eb;
+        }
+    </style>
+
+</head>
+
+<body>
+
+<section class="team-section container">
+
+    <h2 class="text-center mb-4">اعضای تیم IntelRain</h2>
+
+    <div class="row justify-content-center">
+
+        {% for t in members %}
+            <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                <div class="team-card">
+
+                    {% if t.image %}
+                        <img class="team-img" src="{{ t.image.url }}" alt="{{ t.user.get_full_name }}">
+                    {% else %}
+                        <img class="team-img" src="{% static 'img/default-user.png' %}">
+                    {% endif %}
+
+                    <div class="team-name">{{ t.user.get_full_name }}</div>
+                    <div class="team-position">{{ t.position }}</div>
+                    <div class="team-bio">{{ t.bio }}</div>
+
+                    <div class="team-social mt-3">
+
+                        {% if t.linkedin %}
+                            <a href="{{ t.linkedin }}" target="_blank"><i class="bi bi-linkedin"></i></a>
+                        {% endif %}
+
+                        {% if t.github %}
+                            <a href="{{ t.github }}" target="_blank"><i class="bi bi-github"></i></a>
+                        {% endif %}
+
+                        {% if t.telegram %}
+                            <a href="{{ t.telegram }}" target="_blank"><i class="bi bi-telegram"></i></a>
+                        {% endif %}
+
+                    </div>
+
+                </div>
+            </div>
+        {% empty %}
+            <p class="text-center">هیچ عضو تیمی ثبت نشده است.</p>
+        {% endfor %}
+
+    </div>
+</section>
+
+</body>
+</html>

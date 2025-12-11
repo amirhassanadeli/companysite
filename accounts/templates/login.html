@@ -1,0 +1,92 @@
+{% extends "base_auth.html" %}
+{% load static %}
+
+{% block content %}
+    <div class="login-box">
+
+        <div class="logo">
+            <img src="#" alt="IntelRain">
+    </div>
+
+        <div class="title">ورود به حساب کاربری</div>
+
+        {% if messages %}
+            <script>
+                window.djangoMessages = [
+                    {% for m in messages %}
+                        {"text": "{{ m }}", "tag": "{{ m.tags }}"},
+                    {% endfor %}
+                ];
+            </script>
+    {% endif %}
+
+        <form method="POST" action="" class="mt-3">
+        {% csrf_token %}
+
+            <!-- EMAIL -->
+            <div class="mb-3">
+                <label class="form-label">ایمیل</label>
+                <div class="input-group">
+                <span class="input-group-text">
+                    <i class="bi bi-envelope-fill"></i>
+                </span>
+                    <input
+                            type="email"
+                            name="email"
+                            class="form-control"
+                            placeholder="ایمیل خود را وارد کنید"
+                            autocomplete="email"
+                            required
+                            autofocus>
+                </div>
+                {% if form.email.errors %}
+                    <div class="error-text">
+                        {{ form.email.errors.0 }}
+                    </div>
+                {% endif %}
+        </div>
+
+            <!-- PASSWORD -->
+            <div class="mb-3">
+                <label class="form-label">رمز عبور</label>
+                <div class="input-group">
+                <span class="input-group-text">
+                    <i class="bi bi-lock-fill"></i>
+                </span>
+                    <input
+                            type="password"
+                            id="login_password"
+                            name="password"
+                            class="form-control"
+                            placeholder="رمز عبور خود را وارد کنید"
+                            autocomplete="current-password"
+                            required>
+                    <span class="input-group-text show-pass" onclick="togglePassword()">
+                    <i id="passIcon" class="bi bi-eye"></i>
+                </span>
+                </div>
+                {% if form.password.errors %}
+                    <div class="error-text">
+                        {{ form.password.errors.0 }}
+                    </div>
+                {% endif %}
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100 mt-2 mb-3">
+                <i class="bi bi-box-arrow-in-right"></i>
+                ورود
+            </button>
+
+            <div class="text-center mt-2">
+                <a href="#" class="text-secondary text-decoration-none">
+                    رمز عبور خود را فراموش کرده‌اید؟
+                </a>
+            </div>
+
+            <div class="footer-link">
+                حساب کاربری ندارید؟
+                <a href="{% url 'register' %}">ثبت‌نام</a>
+            </div>
+    </form>
+</div>
+{% endblock %}

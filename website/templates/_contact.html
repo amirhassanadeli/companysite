@@ -1,0 +1,121 @@
+<section id="contact" class="contact-section">
+
+    <div class="container">
+
+        <!-- Section Title -->
+        <h2 class="section-title">تماس با ما</h2>
+        <p class="section-subtitle">آماده گفتگو و همکاری با شما هستیم</p>
+
+        <div class="row justify-content-center">
+
+            <!-- Contact Information -->
+            <div class="col-lg-5 mb-4" dir="rtl">
+                <div class="contact-card">
+
+                    <h4 class="contact-card-title">راه‌های ارتباطی</h4>
+
+                    <div class="contact-item">
+                        <i class="fas fa-envelope contact-icon"></i>
+                        <div>
+                            <h5 class="contact-item-title">ایمیل</h5>
+                            <p class="contact-item-text">info@intelrain.com</p>
+                        </div>
+                    </div>
+
+                    <div class="contact-item">
+                        <i class="fas fa-phone contact-icon"></i>
+                        <div>
+                            <h5 class="contact-item-title">تلفن</h5>
+                            <p class="contact-item-text">09982415502</p>
+                        </div>
+                    </div>
+
+                    <div class="contact-item">
+                        <i class="fab fa-telegram contact-icon"></i>
+                        <div>
+                            <h5 class="contact-item-title">تلگرام</h5>
+                            <p class="contact-item-text">@intelrain</p>
+                        </div>
+                    </div>
+
+                    <!-- Social Icons -->
+                    <div class="social-links">
+                        <a href="tel:+989982415502" class="social-link" title="Phone">
+                            <i class="fas fa-phone-alt"></i>
+                        </a>
+
+                        <a href="mailto:info@intelrain.com" class="social-link" title="Email">
+                            <i class="fas fa-envelope"></i>
+                        </a>
+
+                        <a href="https://t.me/intelrain" class="social-link" title="Telegram" target="_blank">
+                            <i class="fab fa-telegram"></i>
+                        </a>
+
+                        <a href="https://wa.me/989982415502" class="social-link" title="WhatsApp" target="_blank">
+                            <i class="fab fa-whatsapp"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact Form -->
+            <div class="col-lg-7">
+                <div class="contact-form-card">
+
+                    <h4 class="contact-form-title">ارسال پیام</h4>
+                    {% if messages %}
+                        <script>
+                            window.djangoMessages = [
+                                {% for m in messages %}
+                                    {"text": "{{ m }}", "tag": "{{ m.tags }}"},
+                                {% endfor %}
+                            ];
+                        </script>
+                    {% endif %}
+
+
+                    <form id="contactForm" method="POST" action="{% url 'website:contact' %}">
+                        {% csrf_token %}
+
+                        <div class="row">
+
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">نام و نام خانوادگی *</label>
+                                <input type="text" id="name" name="name" class="form-control" maxlength="100" required>
+                                <div class="error-text" id="nameError"></div>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">ایمیل *</label>
+                                <input type="email" id="email" name="email" class="form-control" maxlength="100"
+                                       required>
+                                <div class="error-text" id="emailError"></div>
+                            </div>
+
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">تلفن *</label>
+                            <input type="text" id="phone" name="phone" class="form-control" maxlength="20" required>
+                            <div class="error-text" id="phoneError"></div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">پیام *</label>
+                            <textarea id="message" name="message" class="form-control" rows="5" maxlength="2000"
+                                      required></textarea>
+                            <div class="error-text" id="messageError"></div>
+                        </div>
+
+                        <button type="submit" id="submitBtn" class="btn btn-primary-custom btn-block">
+                            <i class="fas fa-paper-plane"></i>
+                            <span id="submitText">ارسال پیام</span>
+                            <div id="loadingSpinner" class="loading-spinner" style="display: none;"></div>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

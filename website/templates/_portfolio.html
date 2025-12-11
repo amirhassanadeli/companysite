@@ -1,0 +1,97 @@
+<section id="portfolio" class="portfolio-section py-5">
+
+    <div class="container">
+
+        <!-- Title -->
+        <div class="section-header text-center mb-5">
+            <h2 class="section-title">نمونه کارهای ما</h2>
+            <p class="section-subtitle">پروژه‌های اجرا شده در حوزه هوش مصنوعی و داده</p>
+        </div>
+
+        <div class="row">
+
+            {% for project in projects %}
+
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <article class="portfolio-card shadow-sm">
+
+                        <!-- Image -->
+                        <div class="portfolio-image">
+
+                            {% if project.image %}
+                                <img src="{{ project.image.url }}" alt="{{ project.title }}"
+                                     class="img-fluid rounded-top">
+                            {% else %}
+                                <img src="#"
+                                     alt="پروژه هوش مصنوعی"
+                                     class="img-fluid rounded-top opacity-75">
+                            {% endif %}
+
+                        </div>
+
+                        <!-- Content -->
+                        <div class="portfolio-body p-3">
+
+                            <!-- Title -->
+                            <h3 class="portfolio-title fs-5 mb-2">{{ project.title }}</h3>
+
+                            <!-- Description -->
+                            {% if project.short_description %}
+                                <p class="text-muted small mb-3">{{ project.short_description }}</p>
+                            {% endif %}
+
+                            <!-- Technologies -->
+                            <div class="d-flex flex-wrap gap-2 mb-3">
+
+                                {% for tech in project.get_technologies_list %}
+                                    <span class="badge tech-badge bg-info bg-opacity-10 text-info px-2 py-1">
+                                    {{ tech }}
+                                </span>
+                                {% empty %}
+                                    <span class="badge bg-secondary">بدون تکنولوژی ثبت شده</span>
+                                {% endfor %}
+                            </div>
+
+                            <!-- Buttons -->
+                            <div class="d-flex justify-content-between align-items-center">
+
+                                {% if project.demo_url %}
+                                    <a href="{{ project.demo_url }}" class="btn btn-outline-primary btn-sm"
+                                       target="_blank">
+                                        دموی آنلاین
+                                    </a>
+                                {% endif %}
+
+                                {% if project.github_url %}
+                                    <a href="{{ project.github_url }}" class="btn btn-outline-dark btn-sm"
+                                       target="_blank">
+                                        گیت هاب
+                                    </a>
+                                {% endif %}
+
+                                <a href="{% url 'website:project_detail' project.id %}"
+                                   class="btn btn-primary btn-sm ms-auto">
+                                    جزئیات
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                    </article>
+                </div>
+
+            {% empty %}
+
+                <div class="col-12 text-center py-5 text-muted">
+                    <h4>⛔ هنوز پروژه‌ای ثبت نشده است</h4>
+                    <p>پروژه‌های آینده به زودی اضافه خواهند شد.</p>
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+</section>

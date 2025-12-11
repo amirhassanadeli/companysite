@@ -1,0 +1,72 @@
+<nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-transparent" id="mainNavbar">
+    <div class="container">
+
+        <!-- Brand -->
+        <a class="navbar-brand fw-bold d-flex align-items-center" href="{% url 'website:index' %}">
+            <i class="fas fa-robot fs-4 ms-2"></i>
+            باران اندیشه داده و هوش
+        </a>
+
+        <!-- Mobile Toggle -->
+        <button class="navbar-toggler" type="button"
+                data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Menu -->
+        <div class="collapse navbar-collapse" id="navbarNav">
+
+            <ul class="navbar-nav ms-auto">
+
+                <li class="nav-item">
+                    <a class="nav-link {% if request.path == '/' %}active{% endif %}"
+                       href="{% url 'website:index' %}">خانه</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="/website/static#services">خدمات</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="/website/static#portfolio">نمونه کارها</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="/website/static#contact">تماس با ما</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link {% if request.path == '/identity/' %}active{% endif %}"
+                       href="{% url 'website:identity' %}">کارت شرکت</a>
+                </li>
+
+                {% if request.user.is_authenticated %}
+
+                    <li class="nav-item ms-3">
+                        <a class="nav-link text-info fw-bold">
+                            {{ request.user.username }}
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="btn btn-outline-danger px-3 ms-2"
+                           href="{% url 'logout' %}">
+                            خروج
+                        </a>
+                    </li>
+
+                {% else %}
+
+                    <li class="nav-item">
+                        <a href="{% url 'login' %}" class="login-btn-nav">
+                            <span class="icon">⇦</span>
+                            ورود | ثبت‌نام
+                        </a>
+                    </li>
+
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>
