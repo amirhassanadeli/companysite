@@ -1,30 +1,27 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-
 from .models import User
 
 
 @admin.register(User)
 class CustomUserAdmin(UserAdmin):
-    # ستون‌هایی که در لیست کاربران نمایش داده می‌شود
-    list_display = ("email", "username", "is_staff", "is_superuser", "is_active", "date_joined")
-    list_filter = ("is_staff", "is_superuser", "is_active")
-    search_fields = ("email", "username")
-    ordering = ("-date_joined",)
+    model = User
 
-    # نمایش فیلدها داخل صفحه ویرایش User
+    ordering = ('email',)
+    list_display = ('email', 'phone', 'is_staff', 'is_active')
+
     fieldsets = (
-        (None, {"fields": ("email", "username", "password")}),
-        ("دسترسی‌ها", {"fields": ("is_staff", "is_active", "is_superuser", "groups", "user_permissions")}),
-        ("زمان‌ها", {"fields": ("last_login", "date_joined")}),
+        (None, {'fields': ('email', 'password')}),
+        ('اطلاعات شخصی', {'fields': ('phone',)}),
+        ('دسترسی‌ها', {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}),
+        ('زمان‌ها', {'fields': ('last_login',)}),
     )
 
-    readonly_fields = ("last_login", "date_joined")
-
-    # فرم ساخت کاربر جدید در admin
     add_fieldsets = (
         (None, {
-            "classes": ("wide",),
-            "fields": ("email", "username", "password1", "password2", "is_staff", "is_superuser", "is_active")
+            'classes': ('wide',),
+            'fields': ('email', 'phone', 'password1', 'password2', 'is_staff', 'is_active'),
         }),
     )
+
+    search_fields = ('email', 'phone')
