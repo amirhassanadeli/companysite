@@ -1,9 +1,8 @@
 from django.contrib import admin
+from django.contrib.auth import get_user_model
 from django.contrib.auth.admin import UserAdmin
-from django.contrib.auth.models import User
 
-# ❌ حذف ثبت پیش‌فرض
-admin.site.unregister(User)
+User = get_user_model()
 
 
 @admin.register(User)
@@ -37,8 +36,8 @@ class CustomUserAdmin(UserAdmin):
 
     fieldsets = (
         (None, {'fields': ('username', 'password')}),
-        ('Personal Info', {'fields': ('first_name', 'last_name', 'email')}),
-        ('Permissions', {
+        ('اطلاعات شخصی', {'fields': ('first_name', 'last_name', 'email')}),
+        ('دسترسی‌ها', {
             'fields': (
                 'is_active',
                 'is_staff',
@@ -47,7 +46,7 @@ class CustomUserAdmin(UserAdmin):
                 'user_permissions',
             )
         }),
-        ('Important dates', {'fields': ('last_login', 'date_joined')}),
+        ('تاریخ‌ها', {'fields': ('last_login', 'date_joined')}),
     )
 
     add_fieldsets = (
