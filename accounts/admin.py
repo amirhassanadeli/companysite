@@ -1,27 +1,67 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import User
+from django.contrib.auth.models import User
+
+# ❌ حذف ثبت پیش‌فرض
+admin.site.unregister(User)
 
 
 @admin.register(User)
 class CustomUserAdmin(UserAdmin):
     model = User
 
-    ordering = ('email',)
-    list_display = ('email', 'phone', 'is_staff', 'is_active')
+    list_display = (
+        'username',
+        'email',
+        'first_name',
+        'last_name',
+        'is_staff',
+        'is_active',
+        'date_joined',
+    )
+
+    list_filter = (
+        'is_staff',
+        'is_superuser',
+        'is_active',
+    )
+
+    search_fields = (
+        'username',
+        'email',
+        'first_name',
+        'last_name',
+    )
+
+    ordering = ('-date_joined',)
 
     fieldsets = (
-        (None, {'fields': ('email', 'password')}),
-        ('اطلاعات شخصی', {'fields': ('phone',)}),
-        ('دسترسی‌ها', {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}),
-        ('زمان‌ها', {'fields': ('last_login',)}),
+        (None, {'fields': ('username', 'password')}),
+        ('Personal Info', {'fields': ('first_name', 'last_name', 'email')}),
+        ('Permissions', {
+            'fields': (
+                'is_active',
+                'is_staff',
+                'is_superuser',
+                'groups',
+                'user_permissions',
+            )
+        }),
+        ('Important dates', {'fields': ('last_login', 'date_joined')}),
     )
 
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('email', 'phone', 'password1', 'password2', 'is_staff', 'is_active'),
+            'fields': (
+                'username',
+                'email',
+                'first_name',
+                'last_name',
+                'password1',
+                'password2',
+                'is_staff',
+                'is_active',
+            ),
         }),
     )
-
-    search_fields = ('email', 'phone')

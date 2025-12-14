@@ -1,78 +1,77 @@
 from django.contrib import messages
-from django.contrib.auth import login, logout
-from django.core.cache import cache
+from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.shortcuts import render, redirect
 
-from .forms import RegisterForm, LoginForm
+from .forms import SignUpForm, UpdateUserForm, ChangePasswordForm
 
 
-def register_view(request):
-    if request.user.is_authenticated:
-        return redirect('website:index')
+def change_password(request):
+    if not request.user.is_authenticated:
+        messages.error(request, "برای تغییر رمز عبور باید وارد حساب شوید.")
+        return redirect('login')
 
+    if request.method == 'POST':
+        form = ChangePasswordForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)  # جلوگیری از logout
+            messages.success(request, "رمز عبور با موفقیت تغییر کرد.")
+            return redirect('website:index')
+    else:
+        form = ChangePasswordForm(request.user)
+
+    return render(request, 'change_password.html', {
+        'form': form
+    })
+
+
+def login_user(request):
     if request.method == "POST":
-        form = RegisterForm(request.POST)
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        user = authenticate(request, username=username, password=password)
+        if user:
+            login(request, user)
+            messages.success(request, "You are now logged in.")
+            return redirect('website:index')
+        else:
+            messages.error(request, "Invalid username or password.")
+            return redirect('login')
+
+    return render(request, "login.html")
+
+
+def logout_user(request):
+    logout(request)
+    messages.success(request, "You have been logged out.")
+    return redirect('website:index')
+
+
+def register_user(request):
+    if request.method == "POST":
+        form = SignUpForm(request.POST)
         if form.is_valid():
             user = form.save()
             login(request, user)
-
-            messages.success(request, "حساب شما با موفقیت ایجاد شد 🌹")
-
-            next_url = request.GET.get("next")
-            return redirect(next_url if next_url else 'website:index')
-        else:
-            messages.error(request, "لطفاً خطاهای فرم را بررسی کنید")
+            messages.success(request, "Registration successful. Welcome!")
+            return redirect('website:index')
     else:
-        form = RegisterForm()
+        form = SignUpForm()
 
-    return render(request, 'register.html', {'form': form})
-
-
-def get_client_ip(request):
-    x_forwarded_for = request.META.get("HTTP_X_FORWARDED_FOR")
-    if x_forwarded_for:
-        ip = x_forwarded_for.split(",")[0].strip()
-    else:
-        ip = request.META.get("REMOTE_ADDR")
-    return ip
+    return render(request, "register.html", {'form': form})
 
 
-def login_view(request):
-    ip = get_client_ip(request)
-    fail_count = cache.get(f"login_fail_{ip}", 0)
+def update_user(request):
+    if not request.user.is_authenticated:
+        messages.error(request, "You must be logged in.")
+        return redirect('login')
 
-    if fail_count >= 5:
-        messages.error(request, "تلاش‌های ورود بیش از حد — لطفاً ۵ دقیقه بعد تلاش کنید")
-        return render(request, "login.html", {"form": LoginForm()})
+    form = UpdateUserForm(request.POST or None, instance=request.user)
 
-    if request.user.is_authenticated:
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        messages.success(request, "Profile updated successfully.")
         return redirect('website:index')
 
-    if request.method == "POST":
-        form = LoginForm(request.POST)
-        if form.is_valid():
-            user = form.cleaned_data["user"]
-
-            login(request, user)
-            cache.delete(f"login_fail_{ip}")
-
-            display_name = user.email  # ✅ اصلاح نهایی
-
-            messages.success(request, f"{display_name} عزیز خوش آمدید 🌹")
-
-            next_url = request.GET.get("next")
-            return redirect(next_url if next_url else 'website:index')
-
-        else:
-            cache.set(f"login_fail_{ip}", fail_count + 1, timeout=300)
-            messages.error(request, "ایمیل یا رمز عبور اشتباه است")
-    else:
-        form = LoginForm()
-
-    return render(request, 'login.html', {'form': form})
-
-
-def logout_view(request):
-    logout(request)
-    messages.success(request, "خروج از حساب با موفقیت انجام شد")
-    return redirect('website:index')
+    return render(request, "update_user.html", {'user_form': form})

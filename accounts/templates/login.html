@@ -2,74 +2,65 @@
 {% load static %}
 
 {% block content %}
-    <div class="login-box">
+<div class="login-box">
 
-        <div class="logo">
-            <img src="#" alt="IntelRain">
+    <div class="logo text-center mb-3">
+        <img src="{% static 'images/logo.png' %}" alt="IntelRain" height="50">
     </div>
 
-        <div class="title">ورود به حساب کاربری</div>
+    {% if user.is_authenticated %}
+        <script>
+            window.location.href = "{% url 'website:index' %}";
+        </script>
+    {% else %}
 
+        <div class="title mb-3">ورود به حساب کاربری</div>
+
+        <!-- Django Messages -->
         {% if messages %}
-            <script>
-                window.djangoMessages = [
-                    {% for m in messages %}
-                        {"text": "{{ m }}", "tag": "{{ m.tags }}"},
-                    {% endfor %}
-                ];
-            </script>
-    {% endif %}
-
-        <form method="POST" action="" class="mt-3">
-        {% csrf_token %}
-
-            <!-- EMAIL -->
-            <div class="mb-3">
-                <label class="form-label">ایمیل</label>
-                <div class="input-group">
-                <span class="input-group-text">
-                    <i class="bi bi-envelope-fill"></i>
-                </span>
-                    <input
-                            type="email"
-                            name="email"
-                            class="form-control"
-                            placeholder="ایمیل خود را وارد کنید"
-                            autocomplete="email"
-                            required
-                            autofocus>
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} text-center">
+                    {{ message }}
                 </div>
-                {% if form.email.errors %}
-                    <div class="error-text">
-                        {{ form.email.errors.0 }}
-                    </div>
-                {% endif %}
-        </div>
+            {% endfor %}
+        {% endif %}
 
-            <!-- PASSWORD -->
+        <form method="POST" action="{% url 'login' %}" class="mt-3">
+            {% csrf_token %}
+
+            <!-- Username -->
+            <div class="mb-3">
+                <label class="form-label">نام کاربری</label>
+                <div class="input-group">
+                    <span class="input-group-text">
+                        <i class="bi bi-person-fill"></i>
+                    </span>
+                    <input type="text"
+                           class="form-control"
+                           name="username"
+                           placeholder="نام کاربری را وارد کنید"
+                           required
+                           autofocus>
+                </div>
+            </div>
+
+            <!-- Password -->
             <div class="mb-3">
                 <label class="form-label">رمز عبور</label>
                 <div class="input-group">
-                <span class="input-group-text">
-                    <i class="bi bi-lock-fill"></i>
-                </span>
-                    <input
-                            type="password"
-                            id="login_password"
-                            name="password"
-                            class="form-control"
-                            placeholder="رمز عبور خود را وارد کنید"
-                            autocomplete="current-password"
-                            required>
+                    <span class="input-group-text">
+                        <i class="bi bi-lock-fill"></i>
+                    </span>
+                    <input type="password"
+                           class="form-control"
+                           name="password"
+                           id="password"
+                           placeholder="رمز عبور خود را وارد کنید"
+                           required>
                     <span class="input-group-text show-pass" onclick="togglePassword()">
-                    <i id="passIcon" class="bi bi-eye"></i>
-                </span>
+                        <i id="passIcon" class="bi bi-eye"></i>
+                    </span>
                 </div>
-                {% if form.password.errors %}
-                    <div class="error-text">
-                        {{ form.password.errors.0 }}
-                    </div>
-                {% endif %}
             </div>
 
             <button type="submit" class="btn btn-primary w-100 mt-2 mb-3">
@@ -83,10 +74,29 @@
                 </a>
             </div>
 
-            <div class="footer-link">
+            <div class="footer-link text-center mt-2">
                 حساب کاربری ندارید؟
                 <a href="{% url 'register' %}">ثبت‌نام</a>
             </div>
-    </form>
+        </form>
+    {% endif %}
 </div>
+
+<!-- Show / Hide Password -->
+<script>
+    function togglePassword() {
+        const password = document.getElementById("password");
+        const icon = document.getElementById("passIcon");
+
+        if (password.type === "password") {
+            password.type = "text";
+            icon.classList.remove("bi-eye");
+            icon.classList.add("bi-eye-slash");
+        } else {
+            password.type = "password";
+            icon.classList.remove("bi-eye-slash");
+            icon.classList.add("bi-eye");
+        }
+    }
+</script>
 {% endblock %}

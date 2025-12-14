@@ -10,101 +10,11 @@
 
         <div class="title">ایجاد حساب کاربری</div>
 
-        {% if messages %}
-            <script>
-                window.djangoMessages = [
-                    {% for m in messages %}
-                        {"text": "{{ m }}", "tag": "{{ m.tags }}"},
-                    {% endfor %}
-                ];
-            </script>
-        {% endif %}
-
         <form method="POST" class="mt-3">
-        {% csrf_token %}
+            {% csrf_token %}
+            {{ form.as_p }}
 
-            <!-- USERNAME -->
-            <div class="mb-3">
-                <label class="form-label">نام کاربری</label>
-                <div class="input-group">
-                    <span class="input-group-text"><i class="bi bi-person-fill"></i></span>
-                    <input
-                            type="text"
-                            id="id_username"
-                            name="username"
-                            class="form-control"
-                            autocomplete="username"
-                            required>
-                </div>
-                {% if form.username.errors %}
-                    <div class="error-text">{{ form.username.errors.0 }}</div>
-                {% endif %}
-        </div>
-
-            <!-- EMAIL -->
-            <div class="mb-3">
-                <label class="form-label">ایمیل</label>
-                <div class="input-group">
-                    <span class="input-group-text"><i class="bi bi-envelope-fill"></i></span>
-                    <input
-                            type="email"
-                            id="id_email"
-                            name="email"
-                            class="form-control"
-                            autocomplete="email"
-                            required>
-                </div>
-                {% if form.email.errors %}
-                    <div class="error-text">{{ form.email.errors.0 }}</div>
-                {% endif %}
-        </div>
-
-            <!-- PASSWORD -->
-            <div class="mb-3">
-                <label class="form-label">رمز عبور</label>
-                <div class="input-group">
-                    <span class="input-group-text"><i class="bi bi-lock-fill"></i></span>
-                    <input
-                            type="password"
-                            id="id_password"
-                            name="password"
-                            class="form-control"
-                            autocomplete="new-password"
-                            required>
-                    <span class="input-group-text show-pass" onclick="togglePass1()">
-                    <i id="passIcon1" class="bi bi-eye"></i>
-                </span>
-                </div>
-                {% if form.password.errors %}
-                    <div class="error-text">{{ form.password.errors.0 }}</div>
-                {% endif %}
-        </div>
-
-            <!-- CONFIRM PASSWORD -->
-            <div class="mb-3">
-                <label class="form-label">تکرار رمز عبور</label>
-                <div class="input-group">
-                    <span class="input-group-text"><i class="bi bi-lock-fill"></i></span>
-                    <input
-                            type="password"
-                            id="id_confirm_password"
-                            name="confirm_password"
-                            class="form-control"
-                            autocomplete="new-password"
-                            required>
-                    <span class="input-group-text show-pass" onclick="togglePass2()">
-                    <i id="passIcon2" class="bi bi-eye"></i>
-                </span>
-                </div>
-                {% if form.confirm_password.errors %}
-                    <div class="error-text">{{ form.confirm_password.errors.0 }}</div>
-                {% endif %}
-            </div>
-
-            <button type="submit" class="btn btn-success w-100 mt-2 mb-3">
-                <i class="bi bi-check-circle"></i>
-                ثبت‌نام
-            </button>
+            <button type="submit" class="btn btn-success w-100 mt-2 mb-3">ثبت‌نام</button>
 
             <div class="footer-link">
                 قبلاً ثبت‌نام کرده‌اید؟
