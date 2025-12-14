@@ -1,9 +1,11 @@
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
+from django.contrib.auth import get_user_model
 from django.shortcuts import render, redirect
 
 from .forms import SignUpForm, UpdateUserForm, ChangePasswordForm
 
+User = get_user_model()
 
 def change_password(request):
     if not request.user.is_authenticated:
@@ -36,7 +38,7 @@ def login_user(request):
             messages.success(request, "You are now logged in.")
             return redirect('website:index')
         else:
-            messages.error(request, "Invalid username or password.")
+            messages.error(request, "نام کاربری یا رمز عبور اشتباه است.")
             return redirect('login')
 
     return render(request, "login.html")
